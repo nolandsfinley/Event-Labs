@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap');
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* ป้องกันการเลื่อนหน้าจอด้วย Scrollbar ธรรมดา */
+    background-color: #f2f2f7;
+}
+
+/* ซ่อน Scrollbar แต่ยังเลื่อนได้ */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* ป้องกันการคลุมดำข้อความเวลาลากผังงาน */
+.select-none {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* อนิเมชันพื้นฐาน */
+.transition-all { 
+    transition-property: all; 
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); 
+    transition-duration: 300ms; 
+}
+
+/* สไตล์สำหรับจุดบน Canvas */
+.bg-dot-grid {
+    background-image: radial-gradient(#c7c7cc 1.5px, transparent 1.5px);
+}
+
+/* VIEW ANIMATION - สำหรับเข้า-ออกจาก Project */
+
+/* Keyframes สำหรับการเข้า (ซูมใหญ่ขึ้น) */
+@keyframes viewEnterZoom {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Keyframes สำหรับการออก (ซูมเล็กลง) */
+@keyframes viewExitZoom {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+
+/* Class สำหรับ Editor View (เข้า) */
+.view-enter-animation {
+    animation: viewEnterZoom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Class สำหรับ Home View (ออก) */
+.view-exit-animation {
+    animation: viewExitZoom 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Fade in transition สำหรับ Project Cards */
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Project Card Animation */
+.project-card-enter {
+    animation: cardFadeIn 0.3s ease-out;
+}
+
+/* Default transition สำหรับ Project Cards */
+.project-card {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Print Styles */
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+        background: white;
+    }
+    
+    .no-print {
+        display: none !important;
+    }
+    
+    * {
+        box-shadow: none !important;
+    }
+    
+    header, nav, aside {
+        display: none !important;
+    }
+}
