@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventFlow - Professional Event Planning</title>
+    <title>Eflow - Professional Event Planner</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -28,56 +28,90 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- React -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="style.css">
+    <!-- Vite Main Script -->
+    <script type="module" src="./app.jsx"></script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { background: #f9f9fb; }
+        body { font-family: 'Inter', sans-serif; color: #1d1d1f; }
+        #root { width: 100vw; height: 100vh; display: flex; }
+        
+        @keyframes pulse-light-initial {
+            0% { transform: scale(1); opacity: 1; box-shadow: 0 0 40px rgba(0, 113, 227, 0.3); }
+            50% { transform: scale(1.1); opacity: 0.8; box-shadow: 0 0 80px rgba(0, 113, 227, 0.5); }
+            100% { transform: scale(1); opacity: 1; box-shadow: 0 0 40px rgba(0, 113, 227, 0.3); }
         }
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+        @keyframes wave-expand {
+            0% { transform: scale(0.1); opacity: 0.8; }
+            100% { transform: scale(10); opacity: 0; }
         }
-        body {
-            background: #f9f9fb;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: #1d1d1f;
+        .loader-icon {
+            position: relative; width: 90px; height: 90px;
+            background: white; border-radius: 24px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08); z-index: 10;
+            animation: pulse-light-initial 2.5s infinite ease-in-out;
         }
-        #root {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
+        .loader-wave {
+            position: absolute; width: 100px; height: 100px;
+            background: radial-gradient(circle, rgba(0, 113, 227, 0.4) 0%, rgba(0, 113, 227, 0) 70%);
+            border-radius: 50%; animation: wave-expand 3s infinite ease-out;
         }
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+        .loader-wave:nth-child(2) { animation-delay: 1s; }
+        .loader-wave:nth-child(3) { animation-delay: 2s; }
+        .loader-text { margin-top: 40px; text-align: center; opacity: 0; animation: fadeIn 0.8s forwards 0.5s; }
+        @keyframes fadeIn { to { opacity: 1; } }
     </style>
 </head>
 <body>
-    <div id="root">
-        <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: #999; font-size: 14px;">
-            <p>⏳ Loading EventFlow...</p>
+    <div id="root"></div>
+
+    <!-- Premium Splash Screen Loading -->
+    <div id="initial-loader" style="position: fixed; inset: 0; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+            <div class="loader-wave"></div>
+            <div class="loader-wave"></div>
+            <div class="loader-wave"></div>
+            <div class="loader-icon">
+                <i class="fa-solid fa-wand-magic-sparkles" style="font-size: 36px; color: #0071E3;"></i>
+            </div>
+        </div>
+        <div class="loader-text">
+            <h1 style="font-size: 20px; font-weight: 800; color: #1d1d1f; letter-spacing: -0.02em;">Eflow</h1>
+            <p id="loader-msg" style="font-size: 11px; font-weight: 600; color: #86868b; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 8px;">Workspace is Loading...</p>
         </div>
     </div>
 
-    <script type="text/babel" src="app.js"></script>
+    <!-- DEBUG SCRIPTS -->
+    <script>
+        // Global Error Alert
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            var message = [
+                'Message: ' + msg,
+                'URL: ' + url,
+                'Line: ' + lineNo,
+                'Column: ' + columnNo,
+                'Error object: ' + JSON.stringify(error)
+            ].join(' - ');
+            console.error(message);
+            alert("❌ JS ERROR: " + msg + " (Line: " + lineNo + ")");
+            return false;
+        };
+
+        // Fail-safe removal of loader
+        setTimeout(function() {
+            var l = document.getElementById('initial-loader');
+            var msg = document.getElementById('loader-msg');
+            if (l) {
+                if (msg) msg.innerText = "Finalizing...";
+                setTimeout(function() {
+                    l.style.opacity = '0';
+                    l.style.transition = 'opacity 0.8s ease-out';
+                    setTimeout(function() { if(l.parentNode) l.parentNode.removeChild(l); }, 800);
+                }, 1000);
+            }
+        }, 8000); // 8 seconds for safety
+    </script>
 </body>
 </html>

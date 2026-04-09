@@ -1,0 +1,7 @@
+node_modules
+.config
+.firebase
+dist
+.DS_Store
+*.local
+package-lock.json

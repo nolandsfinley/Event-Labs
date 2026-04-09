@@ -1,14 +1,19 @@
 {
   "hosting": {
-    "public": ".",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**",
-      "**/*firebase-adminsdk*.json",
-      "**/*-adminsdk-*.json",
-      "**/*.md",
-      "deploy-events.sh"
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   }
 }
